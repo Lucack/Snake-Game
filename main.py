@@ -33,8 +33,7 @@ class Snake:
 class Food:
 
     def __init__(self):
-
-        x = random.randint(0, (GAME_WIDTH / SPACE_SIZE)-1) * SPACE_SIZE
+        x = random.randint(0, (GAME_WIDTH / SPACE_SIZE) - 1) * SPACE_SIZE
         y = random.randint(0, (GAME_HEIGHT / SPACE_SIZE) - 1) * SPACE_SIZE
 
         self.coordinates = [x, y]
@@ -43,7 +42,6 @@ class Food:
 
 
 def next_turn(snake, food):
-
     x, y = snake.coordinates[0]
 
     if direction == "up":
@@ -89,7 +87,6 @@ def next_turn(snake, food):
 
 
 def change_direction(new_direction):
-
     global direction
 
     if new_direction == 'left':
@@ -111,7 +108,6 @@ def change_direction(new_direction):
 
 
 def check_collisions(snake):
-
     x, y = snake.coordinates[0]
 
     if x < 0 or x >= GAME_WIDTH:
@@ -130,10 +126,9 @@ def check_collisions(snake):
 
 
 def game_over():
-
     canvas.delete(ALL)
-    canvas.create_text(canvas.winfo_width()/2, canvas.winfo_height()/2,
-                       font=('consolas',70), text="GAME OVER", fill="red", tag="gameover")
+    canvas.create_text(canvas.winfo_width() / 2, canvas.winfo_height() / 2,
+                       font=('consolas', 70), text="GAME OVER", fill="red", tag="gameover")
 
 
 window = Tk()
@@ -156,8 +151,8 @@ window_height = window.winfo_height()
 screen_width = window.winfo_screenwidth()
 screen_height = window.winfo_screenheight()
 
-x = int((screen_width/2) - (window_width/2))
-y = int((screen_height/2) - (window_height/2))
+x = int((screen_width / 2) - (window_width / 2))
+y = int((screen_height / 2) - (window_height / 2))
 
 window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 

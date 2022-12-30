@@ -1,2 +1,2 @@
 # Snake-Game
-Creating Snake Game with @AlexSnider (https://github.com/AlexSnider)
+Creating a Snake Game with @AlexSnider (https://github.com/AlexSnider)

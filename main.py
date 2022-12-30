@@ -1,19 +1,18 @@
-# ************************************
-# Python Snake
-# ************************************
+# --------------------------------------------
+#              |  Python Game   |
+# --------------------------------------------
 from tkinter import *
 import random
 from time import sleep
 
 GAME_WIDTH = 700
 GAME_HEIGHT = 700
-SPEED = 50
+SPEED = 100
 SPACE_SIZE = 25
 BODY_PARTS = 3
 SNAKE_COLOR = "#00FF00"
 FOOD_COLOR = "#FF0000"
 BACKGROUND_COLOR = "#000000"
-
 
 class Snake:
 
@@ -26,9 +25,8 @@ class Snake:
             self.coordinates.append([0, 0])
 
         for x, y in self.coordinates:
-            square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR, tag="snake")
+            square = CANVAS.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR, tag="snake")
             self.squares.append(square)
-
 
 class Food:
 
@@ -38,8 +36,17 @@ class Food:
 
         self.coordinates = [x, y]
 
-        canvas.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR, tag="food")
+        CANVAS.create_oval(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=FOOD_COLOR, tag="food")
 
+class Language:
+        def __init__(self):
+            pass
+        def selectPortugues(event):
+            global pt
+            pt = True          
+        def selectEnglish(event):
+            global en
+            en = True
 
 def next_turn(snake, food):
     x, y = snake.coordinates[0]
@@ -55,7 +62,7 @@ def next_turn(snake, food):
 
     snake.coordinates.insert(0, (x, y))
 
-    square = canvas.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR)
+    square = CANVAS.create_rectangle(x, y, x + SPACE_SIZE, y + SPACE_SIZE, fill=SNAKE_COLOR)
 
     snake.squares.insert(0, square)
 
@@ -65,9 +72,9 @@ def next_turn(snake, food):
 
         score += 1
 
-        label.config(text="Score:{}".format(score))
+        scoreText.configure(text="Score:{}".format((score)))
 
-        canvas.delete("food")
+        CANVAS.delete("food")
 
         food = Food()
 
@@ -75,7 +82,7 @@ def next_turn(snake, food):
 
         del snake.coordinates[-1]
 
-        canvas.delete(snake.squares[-1])
+        CANVAS.delete(snake.squares[-1])
 
         del snake.squares[-1]
 
@@ -83,29 +90,26 @@ def next_turn(snake, food):
         game_over()
 
     else:
-        window.after(SPEED, next_turn, snake, food)
+        WINDOW.after(SPEED, next_turn, snake, food)
 
+def timer(new_direction):
+    sp = int(SPEED*0.2)
+    WINDOW.after(sp,change_direction(new_direction))
 
 def change_direction(new_direction):
     global direction
-
     if new_direction == 'left':
-        if direction != 'right':
-            sleep(SPEED/1000)
+        if direction != 'right': 
             direction = new_direction
     elif new_direction == 'right':
         if direction != 'left':
-            sleep(SPEED/1000)
             direction = new_direction
     elif new_direction == 'up':
         if direction != 'down':
-            sleep(SPEED/1000)
             direction = new_direction
     elif new_direction == 'down':
         if direction != 'up':
-            sleep(SPEED/1000)
             direction = new_direction
-
 
 def check_collisions(snake):
     x, y = snake.coordinates[0]
@@ -124,50 +128,149 @@ def check_collisions(snake):
 
     return False
 
+def intro():
+    global en
+    global pt
+    en = False
+    pt = False
+    
+
+    CANVAS.create_text(350,100,text="Welcome to the Snake Game!!",font=("Comic Sans MS",20), fill = "White")
+    CANVAS.create_text(350,130,text="Bem vindo ao Snake Game!!",font=("Comic Sans MS",20), fill = "White")
+
+    CANVAS.create_text(350,280,text="Select Language:",font=("Comic Sans MS",10), fill = "White")
+    CANVAS.create_text(350,300,text="Selecione o Idioma:",font=("Comic Sans MS",10), fill = "White")
+    
+    buttonPtbr = Button(None , text="Português-BR",fg="Black")
+    buttonPtbr.place(x=310,y=350)
+    buttonEN = Button(None , text=" English-EN  ",fg="Black")
+    buttonEN.place(x=315,y=400)
+    CANVAS.pack()
+    
+    
+    
+    while True:
+        buttonPtbr.bind("<Button-1>", Language.selectPortugues)
+        buttonEN.bind("<Button-1>", Language.selectEnglish)
+        if en == True or pt == True:
+            intro = True
+            CANVAS.delete("all")
+            buttonPtbr.destroy()
+            buttonEN.destroy()
+            return intro
+        WINDOW.update_idletasks()
+        WINDOW.update()            
+        sleep(0.01)
+    
+    WINDOW.mainloop()
+
+def menu(event):
+
+    global colorText
+    global count
+    global menuEvent
+    global startGame
+    global restartGame
+
+    if darkTheme == True:
+        colorText = 'White'
+    else:
+        colorText = 'Black'
+
+    if darkTheme == True:
+        CANVAS.config(bg='black')
+    else:
+        CANVAS.config(bg='SystemButtonFace')
+    
+    if menuEvent == True or count > 0:
+        count=0
+        restartGame.destroy()
+        if en == True: 
+            CANVAS.create_text(350,100,text="Snake Game!",font=("Comic Sans MS",20),fill = colorText)
+            restartGame = Button(None , text="Restart Game",fg="Black")
+            restartGame.place(x=350,y=250)            
+        else:
+            CANVAS.create_text(250,130,text="Snake Game!",font=("Comic Sans MS",20), fill = colorText)
+            restartGame = Button(None , text="Reiniciar o Jogo",fg="Black")
+            restartGame.place(x=350,y=250) 
+        restartGame.bind("<Button-1>", game)       
+    else:
+        if en == True:
+            CANVAS.create_text(350,100,text="Welcome to the Snake Game!",font=("Comic Sans MS",20),fill = colorText)
+            startGame = Button(None , text="Start Game",fg="Black",  width=10, height=1)
+        else:
+            CANVAS.create_text(350,130,text="Bem vindo ao Snake Game!",font=("Comic Sans MS",20), fill = colorText)
+            startGame = Button(None , text="Iniciar o Jogo",fg="Black", font=("Comic Sans MS",20))
+        startGame.bind("<Button-1>", game)
+        startGame.place(x=300,y=250)
+    menuEvent = True
+    WINDOW.mainloop()
+
+def game(event):
+
+    global scoreText
+    global startGame
+    global restartGame
+    CANVAS.delete("all")
+
+    startGame.destroy()
+
+    scoreText = Label(WINDOW, text="Score:{}".format(score), font=('consolas', 20))
+    CANVAS.create_line(0,5,GAME_WIDTH,5,fill="Black")
+    # scoreText = CANVAS.create_text(350,350,text="Score:{}".format(score),fill = colorText, font=('consolas', 20)) 
+    scoreText.pack(side=TOP)
+   
+
+    WINDOW.bind('<Left>', lambda event: timer('left'))
+    WINDOW.bind('<a>', lambda event: timer('left'))
+    WINDOW.bind('<Right>', lambda event: timer('right'))
+    WINDOW.bind('<d>', lambda event: timer('right'))
+    WINDOW.bind('<Up>', lambda event: timer('up'))
+    WINDOW.bind('<w>', lambda event: timer('up'))
+    WINDOW.bind('<Down>', lambda event: timer('down'))
+    WINDOW.bind('<s>', lambda event: timer('down'))
+
+    snake = Snake()
+    food = Food()
+    WINDOW.update()
+    next_turn(snake, food)
+    WINDOW.update()
+
+    WINDOW.mainloop()
 
 def game_over():
-    canvas.delete(ALL)
-    canvas.create_text(canvas.winfo_width() / 2, canvas.winfo_height() / 2,
+
+    CANVAS.delete(ALL)
+    CANVAS.create_text(CANVAS.winfo_width() / 2, CANVAS.winfo_height() / 2,
                        font=('consolas', 70), text="GAME OVER", fill="red", tag="gameover")
 
-
-window = Tk()
-window.title("Snake game")
-window.resizable(False, False)
+WINDOW = Tk()
+WINDOW.title("Snake game")
+# WINDOW.resizable(False, False)
 
 score = 0
 direction = 'down'
 
-label = Label(window, text="Score:{}".format(score), font=('consolas', 40))
-label.pack()
+CANVAS = Canvas(WINDOW, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH,)
+CANVAS.pack(side=BOTTOM)
 
-canvas = Canvas(window, bg=BACKGROUND_COLOR, height=GAME_HEIGHT, width=GAME_WIDTH)
-canvas.pack()
+screen_width = WINDOW.winfo_screenwidth()
+screen_height = WINDOW.winfo_screenheight()
 
-window.update()
+x = int((screen_width / 2) - (GAME_WIDTH / 2))
+y = int((screen_height / 2) - (GAME_HEIGHT / 2))
 
-window_width = window.winfo_width()
-window_height = window.winfo_height()
-screen_width = window.winfo_screenwidth()
-screen_height = window.winfo_screenheight()
+WINDOW.geometry(f"{GAME_WIDTH}x{GAME_HEIGHT+40}+{x}+{y}")
 
-x = int((screen_width / 2) - (window_width / 2))
-y = int((screen_height / 2) - (window_height / 2))
 
-window.geometry(f"{window_width}x{window_height}+{x}+{y}")
+count = 0
+darkTheme = False
 
-window.bind('<Left>', lambda event: change_direction('left'))
-window.bind('<a>', lambda event: change_direction('left'))
-window.bind('<Right>', lambda event: change_direction('right'))
-window.bind('<d>', lambda event: change_direction('right'))
-window.bind('<Up>', lambda event: change_direction('up'))
-window.bind('<w>', lambda event: change_direction('up'))
-window.bind('<Down>', lambda event: change_direction('down'))
-window.bind('<s>', lambda event: change_direction('down'))
+introEvent = False
+menuEvent = False
+gameEvent = False
+restartEvent =  False
+persoEvent = False
 
-snake = Snake()
-food = Food()
-
-next_turn(snake, food)
-
-window.mainloop()
+intro()
+menu(count)

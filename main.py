@@ -3,11 +3,12 @@
 # ************************************
 from tkinter import *
 import random
+from time import sleep
 
 GAME_WIDTH = 700
 GAME_HEIGHT = 700
 SPEED = 50
-SPACE_SIZE = 50
+SPACE_SIZE = 25
 BODY_PARTS = 3
 SNAKE_COLOR = "#00FF00"
 FOOD_COLOR = "#FF0000"
@@ -93,15 +94,19 @@ def change_direction(new_direction):
 
     if new_direction == 'left':
         if direction != 'right':
+            sleep(SPEED/1000)
             direction = new_direction
     elif new_direction == 'right':
         if direction != 'left':
+            sleep(SPEED/1000)
             direction = new_direction
     elif new_direction == 'up':
         if direction != 'down':
+            sleep(SPEED/1000)
             direction = new_direction
     elif new_direction == 'down':
         if direction != 'up':
+            sleep(SPEED/1000)
             direction = new_direction
 
 
@@ -113,10 +118,13 @@ def check_collisions(snake):
         return True
     elif y < 0 or y >= GAME_HEIGHT:
         return True
-
-    for body_part in snake.coordinates[1:]:
-        if x == body_part[0] and y == body_part[1]:
-            return True
+    for i in range(0,len(snake.coordinates)-1):
+        posx,posy=snake.coordinates[i]
+        if x == posx and y == posy:
+            if i == 0 or i==1:
+                continue
+            else: 
+                return True
 
     return False
 
@@ -154,9 +162,13 @@ y = int((screen_height/2) - (window_height/2))
 window.geometry(f"{window_width}x{window_height}+{x}+{y}")
 
 window.bind('<Left>', lambda event: change_direction('left'))
+window.bind('<a>', lambda event: change_direction('left'))
 window.bind('<Right>', lambda event: change_direction('right'))
+window.bind('<d>', lambda event: change_direction('right'))
 window.bind('<Up>', lambda event: change_direction('up'))
+window.bind('<w>', lambda event: change_direction('up'))
 window.bind('<Down>', lambda event: change_direction('down'))
+window.bind('<s>', lambda event: change_direction('down'))
 
 snake = Snake()
 food = Food()
@@ -164,15 +176,3 @@ food = Food()
 next_turn(snake, food)
 
 window.mainloop()
-# tk = Tk()
-  
-# tk.title("Snake Game!")
-# tk.resizable(0,0)
-# tk.wm_attributes("-topmost",1) # in front of all the window
-# canvas = Canvas(tk,width=WIDTH,height=HEIGHT, bd=0 , highlightbackground='white')
-# canvas.pack()
-# rec = canvas.create_rectangle(0,0,35,35, fill="black")
-
-
-
-# tk.mainloop()

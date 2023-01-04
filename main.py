@@ -1,5 +1,5 @@
 # --------------------------------------------
-#              |  Python Game   |
+#              |  Snake Game   |
 # --------------------------------------------
 from tkinter import *
 import random
@@ -135,16 +135,16 @@ def intro():
     pt = False
     
 
-    CANVAS.create_text(350,100,text="Welcome to the Snake Game!!",font=("Comic Sans MS",20), fill = "White")
-    CANVAS.create_text(350,130,text="Bem vindo ao Snake Game!!",font=("Comic Sans MS",20), fill = "White")
+    CANVAS.create_text(350,100,text="Welcome to the Snake Game!!",font=("Comic Sans MS",25), fill = "White")
+    CANVAS.create_text(350,135,text="Bem vindo ao Snake Game!!",font=("Comic Sans MS",25), fill = "White")
 
-    CANVAS.create_text(350,280,text="Select Language:",font=("Comic Sans MS",10), fill = "White")
-    CANVAS.create_text(350,300,text="Selecione o Idioma:",font=("Comic Sans MS",10), fill = "White")
+    CANVAS.create_text(350,280,text="Select Language:",font=("Comic Sans MS",15), fill = "White")
+    CANVAS.create_text(350,310,text="Selecione o Idioma:",font=("Comic Sans MS",15), fill = "White")
     
-    buttonPtbr = Button(None , text="Português-BR",fg="Black")
-    buttonPtbr.place(x=310,y=350)
-    buttonEN = Button(None , text=" English-EN  ",fg="Black")
-    buttonEN.place(x=315,y=400)
+    buttonPtbr = Button(None , text="Português-BR",fg="Black",font=8)
+    buttonPtbr.place(x=290,y=380)
+    buttonEN = Button(None , text=" English-EN  ",fg="Black",font=8)
+    buttonEN.place(x=295,y=440)
     CANVAS.pack()
     
     
@@ -186,23 +186,25 @@ def menu(event):
         count=0
         restartGame.destroy()
         if en == True: 
-            CANVAS.create_text(350,100,text="Snake Game!",font=("Comic Sans MS",20),fill = colorText)
+            CANVAS.create_text(350,100,text="Snake Game!",font=("Comic Sans MS",25),fill = colorText)
             restartGame = Button(None , text="Restart Game",fg="Black")
             restartGame.place(x=350,y=250)            
         else:
-            CANVAS.create_text(250,130,text="Snake Game!",font=("Comic Sans MS",20), fill = colorText)
+            CANVAS.create_text(250,130,text="Snake Game!",font=("Comic Sans MS",25), fill = colorText)
             restartGame = Button(None , text="Reiniciar o Jogo",fg="Black")
-            restartGame.place(x=350,y=250) 
+            restartGame.place(x=270,y=250) 
         restartGame.bind("<Button-1>", game)       
     else:
         if en == True:
-            CANVAS.create_text(350,100,text="Welcome to the Snake Game!",font=("Comic Sans MS",20),fill = colorText)
-            startGame = Button(None , text="Start Game",fg="Black",  width=10, height=1)
+            CANVAS.create_text(350,100,text="Welcome to the Snake Game!",font=("Comic Sans MS",25),fill = colorText)
+            startGame = Button(None , text="Start Game",fg="Black",font=("Comic Sans MS",15))
+            startGame.place(x=290,y=250)
         else:
-            CANVAS.create_text(350,130,text="Bem vindo ao Snake Game!",font=("Comic Sans MS",20), fill = colorText)
-            startGame = Button(None , text="Iniciar o Jogo",fg="Black", font=("Comic Sans MS",20))
+            CANVAS.create_text(350,130,text="Bem vindo ao Snake Game!",font=("Comic Sans MS",25), fill = colorText)
+            startGame = Button(None , text="Iniciar o Jogo",fg="Black", font=("Comic Sans MS",15))
+            startGame.place(x=270,y=250)
         startGame.bind("<Button-1>", game)
-        startGame.place(x=300,y=250)
+        
     menuEvent = True
     WINDOW.mainloop()
 
@@ -246,7 +248,7 @@ def game_over():
 
 WINDOW = Tk()
 WINDOW.title("Snake game")
-# WINDOW.resizable(False, False)
+WINDOW.resizable(False, False)
 
 score = 0
 direction = 'down'
@@ -264,7 +266,7 @@ WINDOW.geometry(f"{GAME_WIDTH}x{GAME_HEIGHT+40}+{x}+{y}")
 
 
 count = 0
-darkTheme = False
+darkTheme = True
 
 introEvent = False
 menuEvent = False
